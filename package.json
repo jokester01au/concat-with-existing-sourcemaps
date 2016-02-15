@@ -1,24 +1,36 @@
 {
-    "name": "mapcat",
-    "description": "cat for source map files",
-    "main": "lib",
-    "version": "0.3.0",
-    "engines": { "node" : ">=0.4.0" },
-    "maintainers": [{
-        "name": "Eddie Cao",
-        "email": "cao.yiqun@gmail.com",
-        "web": "http://github.com/edc"
-    }],
-    "repositories": [{
-        "type": "git",
-        "url": "https://github.com/edc/mapcat.git"
-    }],
-    "dependencies": {
-        "source-map" : "~0.1.3",
-        "optimist"   : "~0.3.5"
-    },
-    "bin": {
-        "mapcat" : "bin/mapcat"
-    },
-    "scripts": {"test": "node test/run-tests.js"}
+  "name": "mapcat",
+  "description": "cat for source map files",
+  "main": "lib",
+  "version": "0.3.0",
+  "engines": {
+    "node": ">=0.4.0"
+  },
+  "maintainers": [
+    {
+      "name": "Eddie Cao",
+      "email": "cao.yiqun@gmail.com",
+      "web": "http://github.com/edc"
+    }
+  ],
+  "repositories": [
+    {
+      "type": "git",
+      "url": "https://github.com/edc/mapcat.git"
+    }
+  ],
+  "dependencies": {
+    "source-map": "~0.1.3",
+    "optimist": "~0.3.5"
+  },
+  "bin": {
+    "mapcat": "bin/mapcat"
+  },
+  "scripts": {
+    "test": "node test/run-tests.js"
+  },
+  "devDependencies": {
+    "gulp-coffee": "^2.3.1",
+    "gulp-util": "^3.0.7"
+  }
 }

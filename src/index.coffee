@@ -1,25 +1,25 @@
-{readFileSync, writeFileSync} = require('fs')
+{readFileSync, writeFileSync, existsSync, mkdirSync} = require('fs')
 path = require('path')
 {SourceMapConsumer, SourceMapGenerator} = require('source-map')
 
-exports.cat = (inputMapFiles, outJSFile, outMapFile, maproot) ->
+exports.cat = (inputFiles, outFile, outMapFile, maproot) ->
     buffer = []
     generator = new SourceMapGenerator
-        file: outJSFile
+        file: outFile
 
     lineOffset = 0
-    for f in inputMapFiles
-        map = new SourceMapConsumer(readFileSync(f, 'utf-8'))
+    isCSS = outFile.indexOf('css') != -1
+
+    for f in inputFiles
+        map = new SourceMapConsumer(readFileSync(f.map, 'utf-8'))
 
         # concatenate the file
-        srcPath = path.join(path.dirname(f), map.file)
-        src = readFileSync(srcPath, 'utf-8')
-        src = src.replace(/\/\/[@#]\ssourceMappingURL[^\r\n]*/g, '//')
+        src = readFileSync(f.file, 'utf-8')
+        src = if isCSS then src.replace(/\/\/[@#]\ssourceMappingURL[^\r\n]*/g, '//') else src.replace(/\/\*[@#]\ssourceMappingURL[^\r\n]*/g, '/**/')
         buffer.push(src)
 
         # add all mappings in this file
         map.eachMapping (mapping) ->
-            origSrc = path.join(path.dirname(f), mapping.source)
             mapping =
                 generated:
                     line: mapping.generatedLine + lineOffset
@@ -27,16 +27,33 @@ exports.cat = (inputMapFiles, outJSFile, outMapFile, maproot) ->
                 original:
                     line: mapping.originalLine
                     column: mapping.originalColumn
-                source: path.relative(path.dirname(outMapFile), origSrc)
+                source: mapping.source
             generator.addMapping mapping
+
+
+        map.sourcesContent.forEach (sourceContent, i) ->
+            generator.setSourceContent(map.sources[i], sourceContent);
 
         # update line offset so we could start working with the next file
         lineOffset += src.split('\n').length
 
-    if maproot == null
-        buffer.push "//# sourceMappingURL=#{path.relative(path.dirname(outJSFile), outMapFile)}"
+    if !maproot
+        if isCSS
+            buffer.push "/*# sourceMappingURL=#{path.relative(path.dirname(outFile), outMapFile)}*/"
+        else 
+            buffer.push "//# sourceMappingURL=#{path.relative(path.dirname(outFile), outMapFile)}"
     else
-        buffer.push "//# sourceMappingURL=#{maproot + path.relative(path.dirname(outJSFile), outMapFile)}"
+        if isCSS
+            buffer.push "/*# sourceMappingURL=#{maproot + path.relative(path.dirname(outFile), outMapFile)}*/"
+        else 
+            buffer.push "//# sourceMappingURL=#{maproot + path.relative(path.dirname(outFile), outMapFile)}"
 
-    writeFileSync(outJSFile, buffer.join('\n'), 'utf-8')
+
+    outFile.split('/').reduce (prev, curr, i) ->
+        if existsSync(prev) == false
+            mkdirSync(prev)
+
+        return prev + '/' + curr
+
+    writeFileSync(outFile, buffer.join('\n'), 'utf-8')
     writeFileSync(outMapFile, generator.toString(), 'utf-8')
