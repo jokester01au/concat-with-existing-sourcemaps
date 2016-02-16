@@ -1,7 +1,7 @@
-**mapcat** is a simple utility that concatenates JavaScript files while also
-consolidating the corresponding source map files. It is useful if you use
-compile-to-JS languages whose compiler emits source map files. This is the
-case for CoffeeScript "transpiler" version 1.6 or later.
+**concat-with-existing-sourcemaps** is a simple utility that concatenates JavaScript files while also
+consolidating the corresponding source map files.
+
+Based on mapcat by Eddie Cao
 
 ### API
 
