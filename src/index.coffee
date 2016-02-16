@@ -1,4 +1,4 @@
-{readFileSync, writeFileSync, existsSync, mkdirSync} = require('fs')
+{readFileSync, writeFileSync, existsSync, mkdirSync, statSync} = require('fs')
 path = require('path')
 {SourceMapConsumer, SourceMapGenerator} = require('source-map')
 
@@ -11,6 +11,14 @@ exports.bundle = (inputFiles, outFile, outMapFile, maproot) ->
     isCSS = outFile.indexOf('css') != -1
 
     for f in inputFiles
+        try
+            mapExist = statSync(f.map)
+            fileExist = statSync(f.file)
+        catch e
+            console.error('Bundling error:  does not exist! Verify your source.');
+            console.error('Missing file: '+ e.path);
+            continue
+
         map = new SourceMapConsumer(readFileSync(f.map, 'utf-8'))
 
         # concatenate the file
