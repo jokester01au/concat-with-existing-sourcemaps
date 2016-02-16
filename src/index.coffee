@@ -2,7 +2,7 @@
 path = require('path')
 {SourceMapConsumer, SourceMapGenerator} = require('source-map')
 
-exports.cat = (inputFiles, outFile, outMapFile, maproot) ->
+exports.bundle = (inputFiles, outFile, outMapFile, maproot) ->
     buffer = []
     generator = new SourceMapGenerator
         file: outFile
