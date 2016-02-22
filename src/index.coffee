@@ -30,15 +30,14 @@ exports.bundle = (inputFiles, outFile, outMapFile, maproot) ->
         map.eachMapping (mapping) ->
             mapping =
                 generated:
-                    line: mapping.generated.line + lineOffset
-                    column: mapping.generated.column
+                    line: mapping.generatedLine + lineOffset
+                    column: mapping.generatedColumn
                 original:
-                    line: mapping.original.line
-                    column: mapping.original.column
+                    line: mapping.originalLine
+                    column: mapping.originalColumn
                 source: mapping.source,
                 name: mapping.name
             generator.addMapping mapping
-
 
         map.sourcesContent.forEach (sourceContent, i) ->
             generator.setSourceContent(map.sources[i], sourceContent);
