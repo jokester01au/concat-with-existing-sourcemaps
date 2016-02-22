@@ -30,12 +30,13 @@ exports.bundle = (inputFiles, outFile, outMapFile, maproot) ->
         map.eachMapping (mapping) ->
             mapping =
                 generated:
-                    line: mapping.generatedLine + lineOffset
-                    column: mapping.generatedColumn
+                    line: mapping.generated.line + lineOffset
+                    column: mapping.generated.column
                 original:
-                    line: mapping.originalLine
-                    column: mapping.originalColumn
-                source: mapping.source
+                    line: mapping.original.line
+                    column: mapping.original.column
+                source: mapping.source,
+                name: mapping.name
             generator.addMapping mapping
 
 
