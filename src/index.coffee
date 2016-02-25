@@ -63,5 +63,9 @@ exports.bundle = (inputFiles, outFile, outMapFile, maproot) ->
 
         return prev + '/' + curr
 
-    writeFileSync(outFile, buffer.join('\n'), 'utf-8')
-    writeFileSync(outMapFile, generator.toString(), 'utf-8')
+    try
+        writeFileSync(outFile, buffer.join('\n'), 'utf-8')
+        writeFileSync(outMapFile, generator.toString(), 'utf-8')
+    catch e
+        console.log(e);
+        console.error('Error writing bundle. Error: ' + e);
