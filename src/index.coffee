@@ -39,12 +39,13 @@ exports.bundle = (inputFiles, outFile, outMapFile, maproot) ->
                     source: mapping.source,
                     name: mapping.name
                 generator.addMapping mapping
-
-            map.sourcesContent.forEach (sourceContent, i) ->
-                generator.setSourceContent(map.sources[i], sourceContent);
         catch e
             #To much output to error
             continue
+
+        map.sourcesContent.forEach (sourceContent, i) ->
+            generator.setSourceContent(map.sources[i], sourceContent);
+
 
         # update line offset so we could start working with the next file
         lineOffset += src.split('\n').length
