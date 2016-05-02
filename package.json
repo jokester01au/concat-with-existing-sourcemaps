@@ -2,7 +2,7 @@
   "name": "concat-with-existing-sourcemaps",
   "description": "Bundle files with existing souremaps. Based on mapcat by Eddie Cao",
   "main": "lib",
-  "version": "0.5.9",
+  "version": "0.6.0",
   "engines": {
     "node": ">=0.4.0"
   },
@@ -20,8 +20,8 @@
     }
   ],
   "dependencies": {
-    "source-map": "~0.1.3",
-    "optimist": "~0.3.5"
+    "source-map": "~0.5.5",
+    "optimist": "~0.6.1"
   },
   "scripts": {
     "test": "node test/run-tests.js"

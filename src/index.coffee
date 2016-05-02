@@ -27,20 +27,24 @@ exports.bundle = (inputFiles, outFile, outMapFile, maproot) ->
         buffer.push(src)
 
         # add all mappings in this file
-        map.eachMapping (mapping) ->
-            mapping =
-                generated:
-                    line: mapping.generatedLine + lineOffset
-                    column: mapping.generatedColumn
-                original:
-                    line: mapping.originalLine
-                    column: mapping.originalColumn
-                source: mapping.source,
-                name: mapping.name
-            generator.addMapping mapping
+        try
+            map.eachMapping (mapping) ->
+                mapping =
+                    generated:
+                        line: mapping.generatedLine + lineOffset
+                        column: mapping.generatedColumn
+                    original:
+                        line: mapping.originalLine
+                        column: mapping.originalColumn
+                    source: mapping.source,
+                    name: mapping.name
+                generator.addMapping mapping
 
-        map.sourcesContent.forEach (sourceContent, i) ->
-            generator.setSourceContent(map.sources[i], sourceContent);
+            map.sourcesContent.forEach (sourceContent, i) ->
+                generator.setSourceContent(map.sources[i], sourceContent);
+        catch e
+            #To much output to error
+            continue
 
         # update line offset so we could start working with the next file
         lineOffset += src.split('\n').length
